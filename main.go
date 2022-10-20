@@ -2,7 +2,6 @@ package main
 import(
 	"fmt"
 	"net/http"
-	"log"
 	"gopkg.in/mgo.v2"
 	"github.com/julienschmidt/httprouter"
 	"github.com/Noobsdev2k/crud_mongo/controllers"
@@ -10,15 +9,16 @@ import(
 func main() {
 	router := httprouter.New()
 	uc := controllers.NewUserController(getSession())
-	router.GET("/:id", uc.GetUser)
-	router.POST("/", uc.CreateUser)
-	router.DELETE("/:id", uc.DeleteUser)	
+	router.GET("/user/:id", uc.GetUser)
+	router.POST("/user", uc.CreateUser)
+	router.DELETE("/user/:id", uc.DeleteUser)	
 	fmt.Println("Starting...")
 	http.ListenAndServe("localhost:8080", router)
 }
 func getSession() *mgo.Session {
-	s, err := mgo.Dial("localhost:8080")
+	s, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
 	}
+	return s
 }
